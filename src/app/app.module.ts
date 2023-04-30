@@ -3,16 +3,15 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CommonsModule } from './commons/commons.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { S3ServiceService } from './commons/services/s3-service.service';
+import { PopupmodelService } from './commons/services/popupmodel.service';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  declarations: [AppComponent],
+  imports: [BrowserModule, AppRoutingModule, CommonsModule, NgbModule],
+  providers: [S3ServiceService, PopupmodelService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

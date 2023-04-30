@@ -1,0 +1,48 @@
+<div class="m-3">
+  <div class="drop-container" appDnd (fileDropped)="onFileDropped($event)">
+    <input
+      type="file"
+      #fileDropRef
+      id="fileDropRef"
+      min="1"
+      (change)="fileBrowseHandler($event)"
+      name="attachedFiles"
+      ngModel
+      required
+    />
+    <div class="drop-upload">
+      <p><span> Drop</span> your files here or, <span> browse</span></p>
+      <span>All File types supported, Max file size 20 MB </span>
+    </div>
+  </div>
+  <div class="files-list">
+    <div class="single-file" *ngIf="isValidFile && isValidFileSize && file">
+      <div class="info d-flex align-items-center">
+        <div *ngIf="isUploading">Uploading . . .</div>
+        <h4 class="name mb-0 me-2">{{ file?.name }}</h4>
+        <p class="size"></p>
+        <div *ngIf="!autoUpload">
+          <button
+            type="button "
+            class="modal-close"
+            (click)="deleteFile()"
+          ></button>
+          <button
+            type="submit"
+            (click)="uploadFileToS3()"
+            class="btn btn-primary px-4"
+          >
+            Upload
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br /><br />
+  <div *ngIf="!isValidFile" class="alert alert-danger" role="alert">
+    Please select {{ fileTypes }} file.
+  </div>
+  <div *ngIf="!isValidFileSize" class="alert alert-danger" role="alert">
+    Please select file less then {{ MAX_FILE_SIZE / 1000 }} MB
+  </div>
+</div>

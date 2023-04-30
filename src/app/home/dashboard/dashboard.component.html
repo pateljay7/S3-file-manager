@@ -1,0 +1,102 @@
+<div *ngIf="!isDataLoaded">
+  <div class="d-flex justify-content-center mt-4">
+    <div class="spinner-border m-3" role="status"></div>
+  </div>
+  <p class="text-center">Hold on please, we are fetching your data...</p>
+</div>
+
+<div class="border m-2 p-2" *ngIf="isDataLoaded">
+  <div class="row m-1">
+    <nav class="col" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item m-1">
+          <small (click)="onPathChange('', 0)">Home</small>
+        </li>
+        <li
+          class="breadcrumb-item m-1"
+          *ngFor="let path of fullPath.split('/'); let i = index"
+        >
+          <small (click)="onPathChange(path, i + 1)">{{ path }}</small>
+        </li>
+      </ol>
+    </nav>
+    <button
+      class="col col-md-1 btn btn-sm btn-secondary m-2"
+      (click)="openModel(uploadFile)"
+    >
+      Upload File
+    </button>
+    <button
+      class="col col-md-1 btn btn-sm btn-secondary m-2"
+      (click)="openModel(createFolder, 'sm')"
+    >
+      Create Folder
+    </button>
+  </div>
+  <div class="m-2">
+    <div class="d-flex" *ngIf="allDataList.length">
+      <div
+        class="justify-content-start m-3"
+        *ngFor="let data of allDataList"
+        (click)="onClick(data)"
+      >
+        <div [ngClass]="data.type == 'FOLDER' ? 'folder onHover' : 'file onHover'">
+          <p class="text-center text-xl" *ngIf="data.type == 'FILE'">
+            <!-- {{ data.key.split(".")[1] }} -->
+          </p>
+        </div>
+        <p class="text-center text-wrap">{{ data.key }}</p>
+      </div>
+    </div>
+    <div *ngIf="!allDataList.length">
+      <p class="text-center">Empty folder</p>
+    </div>
+  </div>
+</div>
+
+<ng-template #dataShow>
+  <div class="m-3">
+    <h3>{{ selectedData.key }}</h3>
+    <ngx-doc-viewer
+      style="
+        height: 80vh;
+        border: 1px solid #ccc;
+        background-color: rgb(240, 240, 240);
+      "
+      url="{{ dataUrl }}"
+      [viewer]="'url'"
+      loaded
+    >
+    </ngx-doc-viewer>
+  </div>
+</ng-template>
+<ng-template #uploadFile>
+  <app-upload-file-to-s3
+    [S3FolderName]="fullPath"
+    (uploadedFileKey)="uploadedFile()"
+  ></app-upload-file-to-s3>
+</ng-template>
+
+<ng-template class="m-3 p-2" #createFolder>
+  <div class="input m-3">
+    <input
+      [(ngModel)]="newFolderName"
+      type="text"
+      class="form-control mb-4"
+      placeholder="Folder name"
+      aria-label="Recipient's username"
+      aria-describedby="button-addon2"
+    />
+    <div class="input-group-append">
+      <button
+        class="btn btn-outline-primary"
+        type="button"
+        id="button-addon2"
+        (click)="newFolder()"
+        [disabled]="!newFolderName"
+      >
+        Create
+      </button>
+    </div>
+  </div>
+</ng-template>
