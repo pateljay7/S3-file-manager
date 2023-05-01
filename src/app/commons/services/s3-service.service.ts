@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as AWS from 'aws-sdk';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -8,9 +9,9 @@ export class S3ServiceService {
   private S3: AWS.S3;
   constructor() {
     AWS.config.update({
-      accessKeyId: 'AKIAWFSSXZG7VAT7VF4K',
-      secretAccessKey: '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',
-      region: 'ap-south-1',
+      accessKeyId: environment.accessKeyId, //'AKIAWFSSXZG7VAT7VF4K',
+      secretAccessKey: environment.secretAccessKey, //'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',
+      region: environment.region, //'ap-south-1',
     });
     this.S3 = new AWS.S3();
   }
@@ -20,29 +21,58 @@ export class S3ServiceService {
       Delimiter: '/',
       Prefix: path,
     };
-    console.log('path', path);
-
     return new Promise<any>((resolve, reject) => {
-      this.S3.listObjectsV2(params, (err, data) => {
-        if (data) {
-          console.log('data', data);
-          const folders = data.CommonPrefixes?.map((d) =>
-            d.Prefix?.replace(path, '')
-          );
-          const files = data.Contents?.map((c) => c.Key?.replace(path, ''));
-          console.log('folders', folders);
-          let allData: any = [];
-          folders?.forEach((f) => allData.push({ type: 'FOLDER', key: f }));
-          files?.forEach((f) => f && allData.push({ type: 'FILE', key: f }));
-          resolve(allData);
-        }
-      });
+      let allData = [
+        {
+          type: 'FOLDER',
+          key: 'Jay/',
+        },
+        {
+          type: 'FOLDER',
+          key: 'new folder/',
+        },
+        {
+          type: 'FOLDER',
+          key: 'photos/',
+        },
+        {
+          type: 'FILE',
+          key: 'sidebars.css',
+        },
+        {
+          type: 'FILE',
+          key: 'sidebars.js',
+        },
+        {
+          type: 'FILE',
+          key: 'sidebars.js',
+        },
+        {
+          type: 'FILE',
+          key: 'sidebars.js',
+        },
+      ];
+      resolve(allData);
+      // this.S3.listObjectsV2(params, (err, data) => {
+      //   if (data) {
+      //     const folders = data.CommonPrefixes?.map((d) =>
+      //       d.Prefix?.replace(path, '')
+      //     );
+      //     const files = data.Contents?.map((c) => c.Key?.replace(path, ''));
+      //     let allData: any = [];
+      //     folders?.forEach((f) => allData.push({ type: 'FOLDER', key: f }));
+      //     files?.forEach((f) => f && allData.push({ type: 'FILE', key: f }));
+      //     console.log("allData",allData);
+
+      //     resolve(allData);
+      //   }
+      // });
     });
   }
 
   getFileFromS3(key: string, path: string) {
     const params = {
-      Bucket: 'datastoragemanager',
+      Bucket: environment.Bucket, // environment.Bucket,
       Key: path + key,
     };
     return this.S3.getSignedUrlPromise('getObject', params);
@@ -53,7 +83,7 @@ export class S3ServiceService {
       const contentType = file.type;
 
       var params = {
-        Bucket: 'datastoragemanager',
+        Bucket: environment.Bucket,
         Key: path + file.name,
         Body: file,
         ContentType: contentType,
@@ -71,7 +101,7 @@ export class S3ServiceService {
 
   createFolder(name: string) {
     const params = {
-      Bucket: 'datastoragemanager',
+      Bucket: environment.Bucket,
       Key: name,
     };
     return new Promise((resolve, reject) => {

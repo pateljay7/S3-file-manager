@@ -1,0 +1,5 @@
+.hover:hover
+{
+  cursor: pointer;
+  background-color: rgba(204, 204, 204, 0.158);
+}

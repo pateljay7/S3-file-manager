@@ -10,7 +10,9 @@
     <nav class="col" aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item m-1">
-          <small (click)="onPathChange('', 0)">Home</small>
+          <small (click)="onPathChange('', 0)"
+            ><i class="fa fa-home fa-lg" aria-hidden="true"></i>Home</small
+          >
         </li>
         <li
           class="breadcrumb-item m-1"
@@ -25,27 +27,38 @@
       (click)="openModel(uploadFile)"
     >
       Upload File
+      <i class="fa fa-cloud-upload" aria-hidden="true"></i>
     </button>
     <button
       class="col col-md-1 btn btn-sm btn-secondary m-2"
       (click)="openModel(createFolder, 'sm')"
     >
       Create Folder
+      <i class="fa fa-plus-square" aria-hidden="true"></i>
     </button>
   </div>
   <div class="m-2">
-    <div class="d-flex" *ngIf="allDataList.length">
+    <div class="row" *ngIf="allDataList.length">
       <div
-        class="justify-content-start m-3"
+        class="col col-xl-2 col-lg-4 col-md-4 col-sm-6"
         *ngFor="let data of allDataList"
         (click)="onClick(data)"
       >
-        <div [ngClass]="data.type == 'FOLDER' ? 'folder onHover' : 'file onHover'">
+        <app-custom-folder
+          *ngIf="data.type == 'FOLDER'"
+          [folderName]="data.key"
+        ></app-custom-folder>
+        <app-custom-file
+          *ngIf="data.type == 'FILE'"
+          [fileName]="data.key"
+        ></app-custom-file>
+        <!-- <div
+          [ngClass]="data.type == 'FOLDER' ? 'folder onHover' : 'file onHover'"
+        >
           <p class="text-center text-xl" *ngIf="data.type == 'FILE'">
-            <!-- {{ data.key.split(".")[1] }} -->
           </p>
         </div>
-        <p class="text-center text-wrap">{{ data.key }}</p>
+        <p class="text-center text-wrap">{{ data.key }}</p> -->
       </div>
     </div>
     <div *ngIf="!allDataList.length">
