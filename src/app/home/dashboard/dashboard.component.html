@@ -4,45 +4,64 @@
   </div>
   <p class="text-center">Hold on please, we are fetching your data...</p>
 </div>
-
-<div class="border m-2 p-2" *ngIf="isDataLoaded">
+<div
+  class="border m-2 p-2"
+  *ngIf="isDataLoaded"
+  [ngStyle]="{ 'pointer-events': isDisabled ? 'none' : 'auto' }"
+>
   <div class="row m-1">
-    <nav class="col" aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item m-1">
-          <small (click)="onPathChange('', 0)"
-            ><i class="fa fa-home fa-lg" aria-hidden="true"></i>Home</small
+    <div class="col">
+      <nav class="" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item m-1">
+            <i class="fa fa-home fa-sm" aria-hidden="true"></i>
+            <small (click)="onPathChange('', 0)" class="hoverable"> Home</small>
+          </li>
+          <li
+            class="breadcrumb-item m-1"
+            *ngFor="let path of fullPath.split('/'); let i = index"
           >
-        </li>
-        <li
-          class="breadcrumb-item m-1"
-          *ngFor="let path of fullPath.split('/'); let i = index"
-        >
-          <small (click)="onPathChange(path, i + 1)">{{ path }}</small>
-        </li>
-      </ol>
-    </nav>
-    <button
-      class="col col-md-1 btn btn-sm btn-secondary m-2"
-      (click)="openModel(uploadFile)"
-    >
-      Upload File
-      <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-    </button>
-    <button
-      class="col col-md-1 btn btn-sm btn-secondary m-2"
-      (click)="openModel(createFolder, 'sm')"
-    >
-      Create Folder
-      <i class="fa fa-plus-square" aria-hidden="true"></i>
-    </button>
+            <small (click)="onPathChange(path, i + 1)" class="hoverable">{{
+              path
+            }}</small>
+          </li>
+          <li class="mt-1">
+            <div class="col ml-auto dropdown">
+              <i
+                class="fa fa-plus-square-o fa-lg"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="false"
+                aria-expanded="false"
+              >
+              </i>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div
+                  class="dropdown-item hoverable"
+                  (click)="openModel(uploadFile)"
+                >
+                  <i class="fa fa-file fa-sm mr-1"></i> Upload File
+                </div>
+                <div
+                  class="dropdown-item hoverable"
+                  (click)="openModel(createFolder, 'sm')"
+                >
+                  <i class="fa fa-folder fa-sm mr-1"></i>Create Folder
+                </div>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </nav>
+    </div>
   </div>
   <div class="m-2">
     <div class="row" *ngIf="allDataList.length">
       <div
-        class="col col-xl-2 col-lg-4 col-md-4 col-sm-6"
+        class="col col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12"
         *ngFor="let data of allDataList"
-        (click)="onClick(data)"
+        (click)="onClick(data, $event)"
       >
         <app-custom-folder
           *ngIf="data.type == 'FOLDER'"
@@ -51,14 +70,8 @@
         <app-custom-file
           *ngIf="data.type == 'FILE'"
           [fileName]="data.key"
+          [fullPath]="fullPath"
         ></app-custom-file>
-        <!-- <div
-          [ngClass]="data.type == 'FOLDER' ? 'folder onHover' : 'file onHover'"
-        >
-          <p class="text-center text-xl" *ngIf="data.type == 'FILE'">
-          </p>
-        </div>
-        <p class="text-center text-wrap">{{ data.key }}</p> -->
       </div>
     </div>
     <div *ngIf="!allDataList.length">
@@ -83,6 +96,7 @@
     </ngx-doc-viewer>
   </div>
 </ng-template>
+
 <ng-template #uploadFile>
   <app-upload-file-to-s3
     [S3FolderName]="fullPath"

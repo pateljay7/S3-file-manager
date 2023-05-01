@@ -48,3 +48,10 @@
   top: -12px;
   left: 0px;
 }
+
+
+/* nav css */
+.hoverable{
+  cursor: pointer;
+}
+

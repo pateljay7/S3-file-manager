@@ -14,6 +14,7 @@ export class DashboardComponent {
   selectedData: any = {};
   fullPath: string = '';
   newFolderName: string = '';
+  isDisabled: boolean = false;
   @ViewChild('dataShow') dataShow: any;
   constructor(
     private s3Service: S3ServiceService,
@@ -23,7 +24,9 @@ export class DashboardComponent {
     this.fetchInitData();
   }
 
-  onClick(data: { key: string; type: string }) {
+  onClick(data: { key: string; type: string }, e: Event) {
+    e.stopPropagation();
+    e.preventDefault();
     this.selectedData = data;
     if (data.type == 'FILE')
       this.s3Service.getFileFromS3(data.key, this.fullPath).then((data) => {
@@ -60,11 +63,13 @@ export class DashboardComponent {
 
   fetchInitData() {
     // this.isDataLoaded = false;
+    this.isDisabled = true;
     this.s3Service
       .listFolders('datastoragemanager', this.fullPath)
       .then((data) => {
         this.allDataList = data;
         this.isDataLoaded = true;
+        this.isDisabled = false;
       });
   }
 
