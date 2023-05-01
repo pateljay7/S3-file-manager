@@ -22,51 +22,20 @@ export class S3ServiceService {
       Prefix: path,
     };
     return new Promise<any>((resolve, reject) => {
-      let allData = [
-        {
-          type: 'FOLDER',
-          key: 'Jay/',
-        },
-        {
-          type: 'FOLDER',
-          key: 'new folder/',
-        },
-        {
-          type: 'FOLDER',
-          key: 'photos/',
-        },
-        {
-          type: 'FILE',
-          key: 'sidebars.css',
-        },
-        {
-          type: 'FILE',
-          key: 'sidebars.js',
-        },
-        {
-          type: 'FILE',
-          key: 'sidebars.js',
-        },
-        {
-          type: 'FILE',
-          key: 'sidebars.js',
-        },
-      ];
-      resolve(allData);
-      // this.S3.listObjectsV2(params, (err, data) => {
-      //   if (data) {
-      //     const folders = data.CommonPrefixes?.map((d) =>
-      //       d.Prefix?.replace(path, '')
-      //     );
-      //     const files = data.Contents?.map((c) => c.Key?.replace(path, ''));
-      //     let allData: any = [];
-      //     folders?.forEach((f) => allData.push({ type: 'FOLDER', key: f }));
-      //     files?.forEach((f) => f && allData.push({ type: 'FILE', key: f }));
-      //     console.log("allData",allData);
+      this.S3.listObjectsV2(params, (err, data) => {
+        if (data) {
+          const folders = data.CommonPrefixes?.map((d) =>
+            d.Prefix?.replace(path, '')
+          );
+          const files = data.Contents?.map((c) => c.Key?.replace(path, ''));
+          let allData: any = [];
+          folders?.forEach((f) => allData.push({ type: 'FOLDER', key: f }));
+          files?.forEach((f) => f && allData.push({ type: 'FILE', key: f }));
+          console.log('allData', allData);
 
-      //     resolve(allData);
-      //   }
-      // });
+          resolve(allData);
+        }
+      });
     });
   }
 
