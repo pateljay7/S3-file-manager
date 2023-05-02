@@ -76,6 +76,8 @@ export class S3ServiceService {
       Bucket: environment.Bucket,
       Key: path + key,
     };
+    console.log('fetch data', path, key);
+
     return this.S3.getSignedUrlPromise('getObject', params);
   }
 
