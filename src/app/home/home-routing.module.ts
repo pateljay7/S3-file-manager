@@ -8,9 +8,13 @@ const routes: Routes = [
     component: HomeComponent,
     children: [
       {
-        path: '',
+        path: 'drive',
         loadChildren: () =>
           import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+      },
+      {
+        path: '**',
+        redirectTo: 'drive',
       },
     ],
   },

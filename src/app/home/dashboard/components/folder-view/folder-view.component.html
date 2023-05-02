@@ -1,0 +1,129 @@
+<div *ngIf="!isDataLoaded">
+  <div class="d-flex justify-content-center mt-4">
+    <div class="spinner-border m-3" role="status"></div>
+  </div>
+  <p class="text-center">Hold on please, we are fetching your data...</p>
+</div>
+<div
+  class="border m-2 p-2"
+  *ngIf="isDataLoaded"
+  [ngStyle]="{ 'pointer-events': isDisabled ? 'none' : 'auto' }"
+>
+  <div class="row m-1">
+    <div class="col">
+      <nav class="" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item m-1">
+            <i class="fa fa-home fa-sm" aria-hidden="true"></i>
+            <small (click)="onPathChange('', 0)" class="hoverable"> Home</small>
+          </li>
+          <li
+            class="breadcrumb-item m-1"
+            *ngFor="let path of fullPath.split('/'); let i = index"
+          >
+            <small (click)="onPathChange(path, i + 1)" class="hoverable">{{
+              path
+            }}</small>
+          </li>
+          <li class="mt-1">
+            <div class="col ml-auto dropdown">
+              <i
+                class="fa fa-plus-square-o fa-lg"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="false"
+                aria-expanded="false"
+              >
+              </i>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div
+                  class="dropdown-item hoverable"
+                  (click)="openModel(uploadFile)"
+                >
+                  <i class="fa fa-file fa-sm mr-1"></i> Upload File
+                </div>
+                <div
+                  class="dropdown-item hoverable"
+                  (click)="openModel(createFolder, 'sm')"
+                >
+                  <i class="fa fa-folder fa-sm mr-1"></i>Create Folder
+                </div>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <div class="m-2">
+    <div class="row" *ngIf="allDataList.length">
+      <div
+        class="col col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12"
+        *ngFor="let data of allDataList"
+        (click)="onClick(data, $event)"
+      >
+        <app-custom-folder
+          *ngIf="data.type == 'FOLDER'"
+          [folderName]="data.key"
+        ></app-custom-folder>
+        <app-custom-file
+          *ngIf="data.type == 'FILE'"
+          [fileName]="data.key"
+          [fullPath]="fullPath"
+        ></app-custom-file>
+      </div>
+    </div>
+    <div *ngIf="!allDataList.length">
+      <p class="text-center">Empty folder</p>
+    </div>
+  </div>
+</div>
+
+<ng-template #dataShow>
+  <div class="m-3">
+    <h3>{{ selectedData.key }}</h3>
+    <ngx-doc-viewer
+      style="
+        height: 80vh;
+        border: 1px solid #ccc;
+        background-color: rgb(240, 240, 240);
+      "
+      url="{{ dataUrl }}"
+      [viewer]="'url'"
+      loaded
+    >
+    </ngx-doc-viewer>
+  </div>
+</ng-template>
+
+<ng-template #uploadFile>
+  <app-upload-file-to-s3
+    [S3FolderName]="fullPath"
+    (uploadedFileKey)="uploadedFile()"
+  ></app-upload-file-to-s3>
+</ng-template>
+
+<ng-template class="m-3 p-2" #createFolder>
+  <div class="input m-3">
+    <input
+      [(ngModel)]="newFolderName"
+      type="text"
+      class="form-control mb-4"
+      placeholder="Folder name"
+      aria-label="Recipient's username"
+      aria-describedby="button-addon2"
+    />
+    <div class="input-group-append">
+      <button
+        class="btn btn-outline-primary"
+        type="button"
+        id="button-addon2"
+        (click)="newFolder()"
+        [disabled]="!newFolderName"
+      >
+        Create
+      </button>
+    </div>
+  </div>
+</ng-template>

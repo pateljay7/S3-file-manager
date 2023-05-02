@@ -6,9 +6,10 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { CommonsModule } from 'src/app/commons/commons.module';
+import { FolderViewComponent } from './components/folder-view/folder-view.component';
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent, FolderViewComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,

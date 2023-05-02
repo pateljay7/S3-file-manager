@@ -9,9 +9,9 @@ export class S3ServiceService {
   private S3: AWS.S3;
   constructor() {
     AWS.config.update({
-      accessKeyId: environment.accessKeyId, //'AKIAWFSSXZG7VAT7VF4K',
-      secretAccessKey: environment.secretAccessKey, //'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',
-      region: environment.region, //'ap-south-1',
+      accessKeyId: environment.accessKeyId,
+      secretAccessKey: environment.secretAccessKey,
+      region: environment.region,
     });
     this.S3 = new AWS.S3();
   }
@@ -147,6 +147,8 @@ export class S3ServiceService {
         },
         function (err, data) {
           if (err) {
+            console.log('er', err);
+
             resolve({});
           } else {
             reject({});
