@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as AWS from 'aws-sdk';
 import { environment } from 'src/environments/environment';
+import { FileType } from '../interfaces/file.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -61,10 +62,26 @@ export class S3ServiceService {
           const folders = data.CommonPrefixes?.map((d) =>
             d.Prefix?.replace(path, '')
           );
-          const files = data.Contents?.map((c) => c.Key?.replace(path, ''));
+          const files = data.Contents; //?.map((c) => c.Key?.replace(path, ''));
           let allData: any = [];
+          console.log('folder', folders);
+          console.log('files', files);
+
           folders?.forEach((f) => allData.push({ type: 'FOLDER', key: f }));
-          files?.forEach((f) => f && allData.push({ type: 'FILE', key: f }));
+          // files?.forEach((f) => f && allData.push({ type: 'FILE', key: f }));
+          files?.forEach((f) => {
+            let Key = f.Key?.replace(path, '');
+            if (Key) {
+              let file: FileType = {
+                fullPath: path,
+                key: Key,
+                size: f.Size,
+                type: 'FILE',
+                fileType: this.getFIleType(Key as string),
+              };
+              allData.push(file);
+            }
+          });
           resolve(allData);
         }
       });
@@ -158,5 +175,9 @@ export class S3ServiceService {
         }
       );
     });
+  }
+  getFIleType(file: string) {
+    let fileNameArray = file.split('.');
+    return fileNameArray[fileNameArray.length - 1].toLocaleLowerCase();
   }
 }

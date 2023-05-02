@@ -1,5 +1,6 @@
 import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FileType } from '../../interfaces/file.interface';
 
 @Component({
   selector: 'app-doc-viewer',
@@ -8,7 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class DocViewerComponent {
   dataUrl: string = '';
-  file: any;
+  file: FileType;
   private elementRef: ElementRef<HTMLElement>;
   private renderer: Renderer2;
 

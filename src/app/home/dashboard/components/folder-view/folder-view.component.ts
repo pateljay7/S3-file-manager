@@ -44,7 +44,7 @@ export class FolderViewComponent implements OnInit {
     });
   }
 
-  onClick(data: { key: string; type: string }, e: Event) {
+  onClick(data: any, e: Event) {
     e.stopPropagation();
     e.preventDefault();
     this.selectedData = data;

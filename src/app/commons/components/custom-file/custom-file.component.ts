@@ -13,15 +13,12 @@ export class CustomFileComponent {
   constructor(private s3Service: S3ServiceService) {}
 
   getIcon() {
-    const type = this.getFIleType(this.fileName);
+    const type = this.s3Service.getFIleType(this.fileName);
     const icon = FileTypeIconMapping[type as keyof typeof FileTypeIconMapping];
     return `fa ${icon ? icon : 'fa-file'}`;
   }
 
-  getFIleType(file: string) {
-    let fileNameArray = file.split('.');
-    return fileNameArray[fileNameArray.length - 1].toLocaleLowerCase();
-  }
+
 
   onDeleteFile() {
     this.s3Service.deleteFile(this.fileName);
