@@ -27,7 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     NgxDocViewerModule,
     PdfViewerModule,
-    HighlightModule,
+    HighlightModule
   ],
   providers: [
     {
