@@ -61,13 +61,14 @@
       <div
         class="col col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12"
         *ngFor="let data of allDataList"
-        (click)="onClick(data, $event)"
       >
         <app-custom-folder
+          (click)="onClick(data, $event)"
           *ngIf="data.type == 'FOLDER'"
           [folderName]="data.key"
         ></app-custom-folder>
         <app-custom-file
+          (click)="onClick(data, $event)"
           *ngIf="data.type == 'FILE'"
           [fileName]="data.key"
           [fullPath]="fullPath"

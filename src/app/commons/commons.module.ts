@@ -6,6 +6,13 @@ import { CustomFolderComponent } from './components/custom-folder/custom-folder.
 import { CustomFileComponent } from './components/custom-file/custom-file.component';
 import { DocViewerComponent } from './components/doc-viewer/doc-viewer.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import {
+  HighlightModule,
+  HighlightOptions,
+  HIGHLIGHT_OPTIONS,
+} from 'ngx-highlightjs';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -15,7 +22,21 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     CustomFileComponent,
     DocViewerComponent,
   ],
-  imports: [CommonModule, NgxDocViewerModule],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    NgxDocViewerModule,
+    PdfViewerModule,
+    HighlightModule,
+  ],
+  providers: [
+    {
+      provide: HIGHLIGHT_OPTIONS,
+      useValue: <HighlightOptions>{
+        fullLibraryLoader: () => import('highlight.js'),
+      },
+    },
+  ],
   exports: [
     SidebarComponent,
     UploadFileToS3Component,

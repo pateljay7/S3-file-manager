@@ -14,6 +14,7 @@
   </div>
   <div class="photo-container">
     <div class="m-3">
+      <pre><code [highlight]="code" [languages]="['javascript']"  [lineNumbers]="true"></code></pre>
       <img
         *ngIf="
           file.fileType && ['jpg', 'png', 'jpeg', 'gif'].includes(file.fileType)
@@ -23,14 +24,10 @@
         src="{{ dataUrl }}"
         alt=""
       />
-      <ngx-doc-viewer
-        *ngIf="file.fileType && ['pdf', 'pptx'].includes(file.fileType)"
-        style="width: 80vh; height: 80vh"
-        url="{{ dataUrl }}"
-        [viewer]="'url'"
-        loaded
-      >
-      </ngx-doc-viewer>
+      <pdf-viewer src="{{ dataUrl }}" [fit-to-page]="true"></pdf-viewer>
+      <!-- <ngx-doc-viewer
+        url="{{dataUrl}}"
+      ></ngx-doc-viewer> -->
       <ngx-doc-viewer
         *ngIf="file.fileType && ['doc', 'docx'].includes(file.fileType)"
         style="width: 80vh; height: 80vh"
